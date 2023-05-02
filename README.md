@@ -3,7 +3,7 @@
 
 Instructions to run the simulation: 
 
-(Note only the files in folder 3-Tour... are related to the actual simulation, the rest are assignments unrelated to the simulation )
+(Note only the files in folder `3-Touring-Machines-and-Electric-elections` are related to the actual simulation, the rest are assignments unrelated to the simulation )
 1. Install the packages listed in 'requirements.txt'
 2. Change the simulation parameters in the jupyter notebook called `traffic_vis.ipynb` to your preference. (See below for an explanation of the parameters)
 3. Run the jupyter notebook called `traffic_vis.ipynb`
