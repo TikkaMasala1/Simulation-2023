@@ -128,6 +128,14 @@ class TrafficModel(Model):
         # The event is stored as a tuple containing the event function, its arguments, and keyword arguments
         self.events[step].append((event, args, kwargs, repeat_every))
 
+    def run_simulation(self, steps):
+        average_speeds = []
+        for _ in range(steps):
+            self.step()
+            avg_speed = self.calculate_average_speed()
+            average_speeds.append(avg_speed)
+        return average_speeds
+
     def step(self):
         # Execute the scheduled agents' steps
         self.schedule.step()
