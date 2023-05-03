@@ -12,8 +12,7 @@ class Vehicle(Agent):
 
     # Define the step function for the Vehicle agent
     def step(self):
-        # Accelerate
-        # If the vehicle's speed is less than its maximum speed, increase its speed by 1
+        # Accelerate if the vehicle's speed is less than its maximum speed, increase its speed by 1
         if self.speed < self.max_speed:
             self.speed += 1
 
@@ -32,10 +31,15 @@ class Vehicle(Agent):
         if self.speed > 0 and self.random.random() < self.model.slowdown_probability:
             self.speed -= 1
 
-        # Move
         # Update the vehicle's position based on its current speed
         new_position = ((self.pos[0] + self.speed) % self.model.grid.width, 0)
-        self.model.grid.move_agent(self, new_position)
+
+        # Check if the target cell is empty
+        if self.model.grid.is_cell_empty(new_position):
+            self.model.grid.move_agent(self, new_position)
+        else:
+            # Adjust the speed to avoid the collision
+            self.speed = 0
 
 
 # Define the TrafficModel class that inherits from the Mesa Model class
@@ -46,10 +50,15 @@ class TrafficModel(Model):
         self.schedule = RandomActivation(self)  # Schedule for updating agents in random order
         self.slowdown_probability = slowdown_probability  # Probability of vehicles slowing down
 
-        # Create and add vehicles to the grid and the schedule
+        # Create a list of available positions
+        available_positions = list(range(road_length))
+        self.random.shuffle(available_positions)
+
+        # Create normal vehicles
         for i in range(vehicle_count):
             vehicle = Vehicle(i, self, max_speed)
-            self.grid.place_agent(vehicle, (i, 0))
+            position = available_positions.pop()
+            self.grid.place_agent(vehicle, (position, 0))
             self.schedule.add(vehicle)
 
     # Define the step function for the TrafficModel
